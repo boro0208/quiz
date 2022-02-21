@@ -1,6 +1,8 @@
+from sqlite3 import Error
 from PyQt5 import QtWidgets, QtCore, QtGui
 from py_ui.start_page import Ui_MainWindow
 from py_ui.main_page import Ui_MainWindow as Ui_Main
+from db import db_helper as d
 import sys
 
 
@@ -23,6 +25,14 @@ class StartPage(QtWidgets.QMainWindow, Ui_MainWindow):
         self.main_page = MainPage()
         self.main_page.show()
         self.close()
+        conn = d.create_connection()
+        with conn:
+            try:
+                d.create_table(conn)
+                user = (username, level)
+                d.insert_user(conn, user)
+            except Error as e:
+                print(e)
 
 
 def main():
