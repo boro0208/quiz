@@ -1,9 +1,22 @@
 from sqlite3 import Error
-from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5 import QtWidgets
 from py_ui.start_page import Ui_MainWindow
 from py_ui.main_page import Ui_MainWindow as Ui_Main
 from db import db_helper as d
 import sys
+import requests
+
+
+def call_api(level):
+    parameters = {
+        "amount": 10,
+        "type": "multiple",
+        "category": 18,
+        "difficulty": level
+    }
+    response = requests.get(url="https://opentdb.com/api.php", params=parameters)
+    question_data = response.json()["results"]
+    print(question_data)
 
 
 class MainPage(QtWidgets.QMainWindow, Ui_Main):
@@ -33,6 +46,7 @@ class StartPage(QtWidgets.QMainWindow, Ui_MainWindow):
                 d.insert_user(conn, user)
             except Error as e:
                 print(e)
+        call_api(level)
 
 
 def main():
