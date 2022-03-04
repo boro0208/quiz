@@ -41,3 +41,22 @@ def select_users(conn):
     except Error as e:
         print(e)
 
+
+def select_user(conn):
+    try:
+        cur = conn.cursor()
+        cur.execute("SELECT id, username, level, score FROM users ORDER BY id DESC LIMIT 1")
+        rows = cur.fetchall()
+        for row in rows:
+            return row
+    except Error as e:
+        print(e)
+
+
+def update_user(conn, task):
+    sql = ''' UPDATE users
+              SET score = ? 
+              WHERE id = ?'''
+    cur = conn.cursor()
+    cur.execute(sql, task)
+    conn.commit()
