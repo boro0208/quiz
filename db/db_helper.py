@@ -60,3 +60,16 @@ def update_user(conn, task):
     cur = conn.cursor()
     cur.execute(sql, task)
     conn.commit()
+
+
+def select_top10_users(conn, task):
+    sql = ''' SELECT username, score
+              from users
+              WHERE level = ?
+              order by score desc
+              limit 10'''
+    cur = conn.cursor()
+    cur.execute(sql, (task,))
+    rows = cur.fetchall()
+    # for row in rows:
+    return rows
